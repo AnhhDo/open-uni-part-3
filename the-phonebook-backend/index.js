@@ -1,14 +1,21 @@
 const express = require("express");
 const morgan = require("morgan");
-
+const cors = require("cors");
 const app = express();
+
 app.use(express.json());
+app.use(cors());
+app.use(express.static("build"));
 
-morgan.token('returnInfo' , (request,response) => {
-  return JSON.stringify(request.body)
-})
+morgan.token("returnInfo", (request, response) => {
+  return JSON.stringify(request.body);
+});
 
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :returnInfo'))
+app.use(
+  morgan(
+    ":method :url :status :res[content-length] - :response-time ms :returnInfo"
+  )
+);
 
 let persons = [
   {
@@ -37,10 +44,6 @@ let persons = [
     number: "123-456-789",
   },
 ];
-
-app.get("/", (request, response) => {
-  response.send("<h1>Hello World!</h1>");
-});
 
 app.get("/api/persons", (request, response) => {
   response.status(200).json(persons);
